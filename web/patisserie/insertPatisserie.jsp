@@ -25,6 +25,17 @@
         }
         button:hover { background-color: #45a049; }
         select[multiple] { height: 100px; }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
     </style>
 </head>
 <body>
@@ -39,10 +50,11 @@
     <% } %>
     
     <%
-        // Récupérer la liste des parfums disponibles
+        // Récupérer les listes nécessaires
         Parfum parfumTemp = new Parfum();
         List<Parfum> parfums = BddObject.find(parfumTemp, null);
         List<Category> category = BddObject.find(new Category(), null);
+        List<Produit> produits = BddObject.find(new Produit(), null);
     %>
     
     <form action="InsertionPatisserieServlet" method="POST">
@@ -57,8 +69,8 @@
         </div>
         
         <div class="form-group">
-            <label for="parfums">Parfums  :</label>
-            <select name="parfums" id="parfums"  required>
+            <label for="parfums">Parfums :</label>
+            <select name="parfums" id="parfums" required>
                 <% for(Parfum parfum : parfums) { %>
                     <option value="<%= parfum.getId() %>"><%= parfum.getNom() %></option>
                 <% } %>
@@ -66,13 +78,25 @@
         </div>
 
         <div class="form-group">
-    <label for="category">Catégorie :</label>
-    <select name="category" id="category" required>
-        <% for(Category cat : category) { %>
-            <option value="<%= cat.getId() %>"><%= cat.getNomCategory() %></option>
-        <% } %>
-    </select>
-</div>
+            <label for="category">Catégorie :</label>
+            <select name="category" id="category" required>
+                <% for(Category cat : category) { %>
+                    <option value="<%= cat.getId() %>"><%= cat.getNomCategory() %></option>
+                <% } %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Produits utilisés :</label>
+            <div class="checkbox-group">
+                <% for(Produit produit : produits) { %>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="produits" value="<%= produit.getId() %>" id="produit<%= produit.getId() %>">
+                        <label for="produit<%= produit.getId() %>"><%= produit.getNomProduit() %></label>
+                    </div>
+                <% } %>
+            </div>
+        </div>
         
         <button type="submit">Enregistrer</button>
     </form>
